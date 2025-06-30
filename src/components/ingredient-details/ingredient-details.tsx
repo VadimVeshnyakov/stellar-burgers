@@ -1,14 +1,33 @@
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import { Preloader } from '../ui/preloader';
 import { IngredientDetailsUI } from '../ui/ingredient-details';
+import { useSelector, useDispatch } from '../../services/store';
+import { fetchIngredients } from '../../services/slices/ingredientsSlice';
 
 export const IngredientDetails: FC = () => {
+  const { id } = useParams<{ id: string }>();
+  const dispatch = useDispatch();
   /** TODO: взять переменную из стора */
-  const ingredientData = null;
+  const { ingredients, isLoading } = useSelector((state) => state.ingredients);
 
-  if (!ingredientData) {
+  const ingredientData = ingredients.find(
+    (ingredient) => ingredient._id === id
+  );
+
+  useEffect(() => {
+    if (ingredients.length === 0) {
+      dispatch(fetchIngredients());
+    }
+  }, [dispatch, ingredients.length]);
+
+  if (isLoading || (!ingredientData && ingredients.length === 0)) {
     return <Preloader />;
   }
 
-  return <IngredientDetailsUI ingredientData={ingredientData} />;
+  if (!ingredientData && ingredients.length > 0) {
+    return <div>Ингредиент не найден</div>;
+  }
+
+  return <IngredientDetailsUI ingredientData={ingredientData!} />;
 };
