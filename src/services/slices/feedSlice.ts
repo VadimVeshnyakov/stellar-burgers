@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import { getFeedsApi } from '@api';
+import { getFeedsApi, getOrdersApi } from '@api';
 import { TOrder } from '@utils-types';
 
 interface IFeedState {
@@ -8,6 +8,9 @@ interface IFeedState {
   error: string | null;
   total: number;
   totalToday: number;
+  userOrders: TOrder[];
+  userOrdersLoading: boolean;
+  userOrdersError: string | null;
 }
 
 const initialState: IFeedState = {
@@ -15,7 +18,10 @@ const initialState: IFeedState = {
   isLoading: false,
   error: null,
   total: 0,
-  totalToday: 0
+  totalToday: 0,
+  userOrders: [],
+  userOrdersLoading: false,
+  userOrdersError: null
 };
 
 export const fetchFeeds = createAsyncThunk(
@@ -26,6 +32,18 @@ export const fetchFeeds = createAsyncThunk(
       return response;
     } catch (error: any) {
       return thunkAPI.rejectWithValue(error.message);
+    }
+  }
+);
+
+export const fetchUserOrders = createAsyncThunk<TOrder[], void>(
+  'feed/fetchUserOrders',
+  async (_, thunkAPI) => {
+    try {
+      const orders = await getOrdersApi();
+      return orders;
+    } catch (err: any) {
+      return thunkAPI.rejectWithValue(err.message || 'Ошибка загрузки заказов');
     }
   }
 );
@@ -49,6 +67,19 @@ const feedSlice = createSlice({
       .addCase(fetchFeeds.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.error.message || 'Ошибка загрузки ленты заказов';
+      })
+      .addCase(fetchUserOrders.pending, (state) => {
+        state.userOrdersLoading = true;
+        state.userOrdersError = null;
+      })
+      .addCase(fetchUserOrders.fulfilled, (state, action) => {
+        state.userOrders = action.payload;
+        state.userOrdersLoading = false;
+      })
+      .addCase(fetchUserOrders.rejected, (state, action) => {
+        state.userOrdersLoading = false;
+        state.userOrdersError =
+          (action.payload as string) || 'Ошибка загрузки заказов пользователя';
       });
   }
 });

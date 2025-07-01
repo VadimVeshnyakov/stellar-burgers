@@ -1,4 +1,5 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
+import { setCookie, getCookie } from '../../utils/cookie';
 import { TUser } from '@utils-types';
 import {
   registerUserApi,
@@ -35,6 +36,58 @@ export const getUser = createAsyncThunk('user/getUser', async () => {
   return response.user;
 });
 
+export const registerUser = createAsyncThunk(
+  'user/registerUser',
+  async (
+    {
+      name,
+      email,
+      password
+    }: { name: string; email: string; password: string },
+    thunkAPI
+  ) => {
+    try {
+      const response = await registerUserApi({ name, email, password });
+
+      localStorage.setItem('refreshToken', response.refreshToken);
+      setCookie('accessToken', response.accessToken);
+
+      return response.user;
+    } catch (error: any) {
+      return thunkAPI.rejectWithValue(error.message || 'Ошибка регистрации');
+    }
+  }
+);
+
+export const loginUser = createAsyncThunk(
+  'user/loginUser',
+  async (data: { email: string; password: string }, thunkAPI) => {
+    try {
+      const response = await loginUserApi(data);
+      localStorage.setItem('refreshToken', response.refreshToken);
+      setCookie('accessToken', response.accessToken);
+      return response.user;
+    } catch (error: any) {
+      return thunkAPI.rejectWithValue(error.message || 'Ошибка входа');
+    }
+  }
+);
+
+export const updateUser = createAsyncThunk(
+  'user/updateUser',
+  async (
+    userData: { name: string; email: string; password?: string },
+    thunkAPI
+  ) => {
+    try {
+      const response = await updateUserApi(userData);
+      return response.user;
+    } catch (error: any) {
+      return thunkAPI.rejectWithValue(error.message || 'Ошибка обновления');
+    }
+  }
+);
+
 const userSlice = createSlice({
   name: 'user',
   initialState,
@@ -62,6 +115,39 @@ const userSlice = createSlice({
       })
       .addCase(getUser.rejected, (state) => {
         state.isAuthChecked = true;
+      })
+      .addCase(registerUser.pending, (state) => {
+        state.registerUserRequest = true;
+        state.registerUserError = null;
+      })
+      .addCase(
+        registerUser.fulfilled,
+        (state, action: PayloadAction<TUser>) => {
+          state.registerUserRequest = false;
+          state.user = action.payload;
+          state.isAuthenticated = true;
+        }
+      )
+      .addCase(registerUser.rejected, (state, action) => {
+        state.registerUserRequest = false;
+        state.registerUserError =
+          (action.payload as string) || 'Ошибка регистрации';
+      })
+      .addCase(updateUser.fulfilled, (state, action: PayloadAction<TUser>) => {
+        state.user = action.payload;
+      })
+      .addCase(loginUser.pending, (state) => {
+        state.loginUserRequest = true;
+        state.loginUserError = null;
+      })
+      .addCase(loginUser.fulfilled, (state, action: PayloadAction<TUser>) => {
+        state.loginUserRequest = false;
+        state.user = action.payload;
+        state.isAuthenticated = true;
+      })
+      .addCase(loginUser.rejected, (state, action) => {
+        state.loginUserRequest = false;
+        state.loginUserError = (action.payload as string) || 'Ошибка логина';
       });
   }
 });
