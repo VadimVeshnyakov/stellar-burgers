@@ -9,6 +9,7 @@ export const Register: FC = () => {
   const [userName, setUserName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const errorText = useSelector(
     (state: RootState) => state.user.registerUserError
@@ -16,7 +17,10 @@ export const Register: FC = () => {
 
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
-    dispatch(registerUser({ name: userName, email, password }));
+    setLoading(true);
+    dispatch(registerUser({ name: userName, email, password }))
+      .unwrap()
+      .finally(() => setLoading(false));
   };
 
   return (
@@ -29,6 +33,7 @@ export const Register: FC = () => {
       setPassword={setPassword}
       setUserName={setUserName}
       handleSubmit={handleSubmit}
+      loading={loading}
     />
   );
 };

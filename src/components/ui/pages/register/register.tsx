@@ -16,7 +16,8 @@ export const RegisterUI: FC<RegisterUIProps> = ({
   password,
   setPassword,
   userName,
-  setUserName
+  setUserName,
+  loading
 }) => (
   <main className={styles.container}>
     <div className={`pt-6 ${styles.wrapCenter}`}>
@@ -37,6 +38,7 @@ export const RegisterUI: FC<RegisterUIProps> = ({
               error={false}
               errorText=''
               size='default'
+              disabled={loading}
             />
           </div>
           <div className='pb-6'>
@@ -49,6 +51,7 @@ export const RegisterUI: FC<RegisterUIProps> = ({
               error={false}
               errorText=''
               size={'default'}
+              disabled={loading}
             />
           </div>
           <div className='pb-6'>
@@ -56,11 +59,17 @@ export const RegisterUI: FC<RegisterUIProps> = ({
               onChange={(e) => setPassword(e.target.value)}
               value={password}
               name='password'
+              disabled={loading}
             />
           </div>
           <div className={`pb-6 ${styles.button}`}>
-            <Button type='primary' size='medium' htmlType='submit'>
-              Зарегистрироваться
+            <Button
+              type='primary'
+              size='medium'
+              htmlType='submit'
+              disabled={loading}
+            >
+              {loading ? 'Загрузка...' : 'Зарегистрироваться'}
             </Button>
           </div>
           {errorText && (

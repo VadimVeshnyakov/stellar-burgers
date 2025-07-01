@@ -9,7 +9,8 @@ export const ForgotPasswordUI: FC<PageUIProps> = ({
   errorText,
   email,
   setEmail,
-  handleSubmit
+  handleSubmit,
+  loading
 }) => (
   <main className={styles.container}>
     <div className={`pt-6 ${styles.wrapCenter}`}>
@@ -29,11 +30,17 @@ export const ForgotPasswordUI: FC<PageUIProps> = ({
             error={false}
             errorText=''
             size='default'
+            disabled={loading}
           />
         </div>
         <div className={`pb-6 ${styles.button}`}>
-          <Button type='primary' size='medium' htmlType='submit'>
-            Восстановить
+          <Button
+            type='primary'
+            size='medium'
+            htmlType='submit'
+            disabled={loading}
+          >
+            {loading ? 'Загрузка...' : 'Восстановить'}
           </Button>
         </div>
         {errorText && (

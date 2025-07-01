@@ -14,7 +14,8 @@ export const ResetPasswordUI: FC<ResetPasswordUIProps> = ({
   setPassword,
   handleSubmit,
   token,
-  setToken
+  setToken,
+  loading
 }) => (
   <main className={styles.container}>
     <div className={`pt-6 ${styles.wrapCenter}`}>
@@ -29,6 +30,7 @@ export const ResetPasswordUI: FC<ResetPasswordUIProps> = ({
             onChange={(e) => setPassword(e.target.value)}
             value={password}
             name='password'
+            disabled={loading}
           />
         </div>
         <div className='pb-6'>
@@ -41,11 +43,17 @@ export const ResetPasswordUI: FC<ResetPasswordUIProps> = ({
             error={false}
             errorText=''
             size='default'
+            disabled={loading}
           />
         </div>
         <div className={`pb-6 ${styles.button}`}>
-          <Button type='primary' size='medium' htmlType='submit'>
-            Сохранить
+          <Button
+            type='primary'
+            size='medium'
+            htmlType='submit'
+            disabled={loading}
+          >
+            {loading ? 'Загрузка...' : 'Сохранить'}
           </Button>
         </div>
         {errorText && (

@@ -10,13 +10,18 @@ export const Login: FC = () => {
   const errorText = useSelector((state) => state.user.loginUserError);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
+    setLoading(true);
     dispatch(loginUser({ email, password }))
       .unwrap()
       .then(() => navigate('/'))
-      .catch(() => {});
+      .catch(() => {})
+      .finally(() => {
+        setLoading(false);
+      });
   };
 
   return (
@@ -27,6 +32,7 @@ export const Login: FC = () => {
       password={password}
       setPassword={setPassword}
       handleSubmit={handleSubmit}
+      loading={loading}
     />
   );
 };
