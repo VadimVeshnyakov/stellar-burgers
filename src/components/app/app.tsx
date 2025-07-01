@@ -25,14 +25,30 @@ import {
   ProfileOrders,
   NotFound404
 } from '@pages';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from '../../services/store';
+import { getUser, setAuthChecked } from '../../services/slices/userSlice';
+import { getCookie } from '../../utils/cookie';
 
 const ModalSwitch = () => {
   const location = useLocation();
-  const state = location.state as { backgroundLocation?: Location };
+  const dispatch = useDispatch();
+  const { isAuthChecked } = useSelector((state) => state.user);
+
+  useEffect(() => {
+    const accessToken = getCookie('accessToken');
+    if (accessToken) {
+      dispatch(getUser());
+    } else {
+      dispatch(setAuthChecked(true));
+    }
+  }, [dispatch]);
+
+  const background = location.state?.background;
 
   return (
     <>
-      <Routes location={state?.backgroundLocation || location}>
+      <Routes location={background || location}>
         <Route path='/' element={<ConstructorPage />} />
         <Route path='/feed' element={<Feed />} />
 
@@ -87,12 +103,22 @@ const ModalSwitch = () => {
             </ProtectedRoute>
           }
         />
+        <Route
+          path='/profile/orders/:number'
+          element={
+            <ProtectedRoute>
+              <OrderInfo />
+            </ProtectedRoute>
+          }
+        />
+        <Route path='/ingredients/:id' element={<IngredientDetails />} />
+        <Route path='/feed/:number' element={<OrderInfo />} />
 
         <Route path='*' element={<NotFound404 />} />
       </Routes>
 
       {/* Модальные маршруты */}
-      {state?.backgroundLocation && (
+      {background && (
         <Routes>
           <Route
             path='/ingredients/:id'

@@ -104,6 +104,13 @@ const userSlice = createSlice({
     },
     setAuthenticated: (state, action: PayloadAction<boolean>) => {
       state.isAuthenticated = action.payload;
+    },
+    logoutUser: (state) => {
+      state.user = null;
+      state.isAuthenticated = false;
+      state.isAuthChecked = true;
+      localStorage.removeItem('refreshToken');
+      document.cookie = 'accessToken=; Max-Age=0';
     }
   },
   extraReducers: (builder) => {
@@ -152,6 +159,11 @@ const userSlice = createSlice({
   }
 });
 
-export const { setAuthChecked, clearUserErrors, setUser, setAuthenticated } =
-  userSlice.actions;
+export const {
+  setAuthChecked,
+  clearUserErrors,
+  setUser,
+  setAuthenticated,
+  logoutUser
+} = userSlice.actions;
 export default userSlice.reducer;

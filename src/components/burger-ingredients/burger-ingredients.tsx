@@ -7,7 +7,6 @@ import { useSelector, useDispatch } from '../../services/store';
 import { fetchIngredients } from '../../services/slices/ingredientsSlice';
 
 export const BurgerIngredients: FC = () => {
-  /** TODO: взять переменные из стора */
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(fetchIngredients());
@@ -20,12 +19,6 @@ export const BurgerIngredients: FC = () => {
   const sauces = ingredients.filter(
     (ingredient) => ingredient.type === 'sauce'
   );
-
-  /*
-  const buns = [];
-  const mains = [];
-  const sauces = [];
-  */
 
   const [currentTab, setCurrentTab] = useState<TTabMode>('bun');
   const titleBunRef = useRef<HTMLHeadingElement>(null);

@@ -8,7 +8,6 @@ import { fetchIngredients } from '../../services/slices/ingredientsSlice';
 export const IngredientDetails: FC = () => {
   const { id } = useParams<{ id: string }>();
   const dispatch = useDispatch();
-  /** TODO: взять переменную из стора */
   const { ingredients, isLoading } = useSelector((state) => state.ingredients);
 
   const ingredientData = ingredients.find(
@@ -21,7 +20,7 @@ export const IngredientDetails: FC = () => {
     }
   }, [dispatch, ingredients.length]);
 
-  if (isLoading || (!ingredientData && ingredients.length === 0)) {
+  if (isLoading || !ingredientData) {
     return <Preloader />;
   }
 
