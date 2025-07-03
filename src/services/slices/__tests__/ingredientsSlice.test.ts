@@ -1,13 +1,10 @@
-import ingredientsReducer, { fetchIngredients } from '../ingredientsSlice';
+import ingredientsReducer, {
+  fetchIngredients,
+  initialState
+} from '../ingredientsSlice';
 import { TIngredient } from '@utils-types';
 
 describe('ingredientsSlice', () => {
-  const initialState = {
-    ingredients: [],
-    isLoading: false,
-    error: null
-  };
-
   it('должен вернуть начальное состояние по умолчанию', () => {
     expect(ingredientsReducer(undefined, { type: 'UNKNOWN_ACTION' })).toEqual(
       initialState

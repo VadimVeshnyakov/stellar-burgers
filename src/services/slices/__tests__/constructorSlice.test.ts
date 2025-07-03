@@ -2,7 +2,8 @@ import constructorReducer, {
   addIngredient,
   removeIngredient,
   reorderIngredients,
-  clearConstructor
+  clearConstructor,
+  initialState
 } from '../constructorSlice';
 import { TIngredient, TConstructorIngredient } from '@utils-types';
 
@@ -55,11 +56,6 @@ describe('constructorSlice', () => {
     image: 'url',
     image_large: 'url',
     image_mobile: 'url'
-  };
-
-  const initialState = {
-    bun: null,
-    ingredients: []
   };
 
   it('должен возвращать начальное состояние', () => {

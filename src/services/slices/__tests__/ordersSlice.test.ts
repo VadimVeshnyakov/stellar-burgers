@@ -2,25 +2,13 @@ import ordersReducer, {
   clearOrder,
   clearOrderModal,
   createOrder,
-  fetchOrderByNumber
+  fetchOrderByNumber,
+  initialState,
+  IOrdersState
 } from '../ordersSlice';
 import type { TOrder } from '@utils-types';
 
-interface IOrdersState {
-  order: TOrder | null;
-  orderRequest: boolean;
-  orderModal: TOrder | null;
-  error: string | null;
-}
-
 describe('ordersSlice', () => {
-  const initialState: IOrdersState = {
-    order: null,
-    orderRequest: false,
-    orderModal: null,
-    error: null
-  };
-
   const fakeOrder: TOrder = {
     _id: '123',
     ingredients: ['ing1', 'ing2'],

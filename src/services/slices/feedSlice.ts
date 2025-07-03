@@ -13,7 +13,7 @@ interface IFeedState {
   userOrdersError: string | null;
 }
 
-const initialState: IFeedState = {
+export const initialState: IFeedState = {
   orders: [],
   isLoading: false,
   error: null,

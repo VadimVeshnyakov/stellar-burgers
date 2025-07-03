@@ -1,5 +1,9 @@
 /// <reference types="cypress" />
 
+// Общие селекторы
+const constructorIngredientSelector = '[data-cy^="constructor-ingredient-"]';
+const modalSelector = '[data-cy="modal"]';
+
 describe('Бургер-конструктор', () => {
   beforeEach(() => {
     cy.intercept('GET', '**/ingredients', { fixture: 'ingredients.json' }).as(
@@ -13,11 +17,9 @@ describe('Бургер-конструктор', () => {
     cy.addIngredientByName('Краторная булка N-200i');
     cy.addIngredientByName('Филе Люминесцентного тетраодонтимформа');
 
-    cy.get('[data-cy^="constructor-ingredient-"]').should('have.length', 3);
-    cy.get('[data-cy^="constructor-ingredient-"]').contains(
-      'Краторная булка N-200i'
-    );
-    cy.get('[data-cy^="constructor-ingredient-"]').contains(
+    cy.get(constructorIngredientSelector).should('have.length', 3);
+    cy.get(constructorIngredientSelector).contains('Краторная булка N-200i');
+    cy.get(constructorIngredientSelector).contains(
       'Филе Люминесцентного тетраодонтимформа'
     );
   });
@@ -34,8 +36,8 @@ describe('Модальное окно ингредиента', () => {
 
   it('открывается при клике на ингредиент и показывает корректную информацию', () => {
     cy.openIngredientModal('Краторная булка N-200i');
-    cy.get('[data-cy="modal"]').contains('Калории, ккал');
-    cy.get('[data-cy="modal"]').contains('420');
+    cy.get(modalSelector).contains('Калории, ккал');
+    cy.get(modalSelector).contains('420');
   });
 
   it('закрывается по клику на крестик', () => {
@@ -73,12 +75,13 @@ describe('Создание заказа', () => {
     cy.get('button').contains('Оформить заказ').click();
     cy.wait('@createOrder');
 
-    cy.get('[data-cy="modal"]').should('be.visible');
+    cy.get(modalSelector).should('be.visible');
     cy.contains('83358').should('exist');
 
     cy.closeModalByButton();
-    cy.get('[data-cy^="constructor-ingredient-"]').should('have.length', 0);
+    cy.get(constructorIngredientSelector).should('have.length', 0);
   });
+
   afterEach(() => {
     window.localStorage.removeItem('refreshToken');
     cy.clearCookie('accessToken');

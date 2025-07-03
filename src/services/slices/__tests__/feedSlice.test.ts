@@ -1,18 +1,11 @@
-import feedReducer, { fetchFeeds, fetchUserOrders } from '../feedSlice';
+import feedReducer, {
+  fetchFeeds,
+  fetchUserOrders,
+  initialState
+} from '../feedSlice';
 import { TOrder } from '@utils-types';
 
 describe('feedSlice reducer и async thunks', () => {
-  const initialState = {
-    orders: [],
-    isLoading: false,
-    error: null,
-    total: 0,
-    totalToday: 0,
-    userOrders: [],
-    userOrdersLoading: false,
-    userOrdersError: null
-  };
-
   const ordersMock: TOrder[] = [
     {
       _id: '1',
