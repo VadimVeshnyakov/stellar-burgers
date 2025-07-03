@@ -31,11 +31,11 @@ describe('ordersSlice', () => {
     name: 'Test Order'
   };
 
-  it('should return the initial state', () => {
+  it('должен возвращать начальное состояние', () => {
     expect(ordersReducer(undefined, { type: '' })).toEqual(initialState);
   });
 
-  it('should handle clearOrder', () => {
+  it('должен обрабатывать clearOrder', () => {
     const prevState: IOrdersState = {
       order: fakeOrder,
       orderRequest: true,
@@ -45,7 +45,7 @@ describe('ordersSlice', () => {
     expect(ordersReducer(prevState, clearOrder())).toEqual(initialState);
   });
 
-  it('should handle clearOrderModal', () => {
+  it('должен обрабатывать clearOrderModal', () => {
     const prevState: IOrdersState = {
       ...initialState,
       orderModal: fakeOrder
@@ -56,8 +56,8 @@ describe('ordersSlice', () => {
     });
   });
 
-  describe('createOrder async thunk', () => {
-    it('should handle pending', () => {
+  describe('асинхронный thunk createOrder', () => {
+    it('должен обрабатывать pending', () => {
       const action = { type: createOrder.pending.type };
       const state = ordersReducer(initialState, action);
       expect(state).toEqual({
@@ -67,7 +67,7 @@ describe('ordersSlice', () => {
       });
     });
 
-    it('should handle fulfilled', () => {
+    it('должен обрабатывать fulfilled', () => {
       const action = { type: createOrder.fulfilled.type, payload: fakeOrder };
       const state = ordersReducer(initialState, action);
       expect(state).toEqual({
@@ -78,22 +78,22 @@ describe('ordersSlice', () => {
       });
     });
 
-    it('should handle rejected', () => {
+    it('должен обрабатывать rejected', () => {
       const action = {
         type: createOrder.rejected.type,
-        error: { message: 'Failed to create order' }
+        error: { message: 'Ошибка создания заказа' }
       };
       const state = ordersReducer(initialState, action);
       expect(state).toEqual({
         ...initialState,
         orderRequest: false,
-        error: 'Failed to create order'
+        error: 'Ошибка создания заказа'
       });
     });
   });
 
   describe('fetchOrderByNumber async thunk', () => {
-    it('should handle pending', () => {
+    it('должен обрабатывать pending', () => {
       const action = { type: fetchOrderByNumber.pending.type };
       const state = ordersReducer(initialState, action);
       expect(state).toEqual({
@@ -103,7 +103,7 @@ describe('ordersSlice', () => {
       });
     });
 
-    it('should handle fulfilled', () => {
+    it('должен обрабатывать fulfilled', () => {
       const action = {
         type: fetchOrderByNumber.fulfilled.type,
         payload: fakeOrder
@@ -116,16 +116,16 @@ describe('ordersSlice', () => {
       });
     });
 
-    it('should handle rejected', () => {
+    it('должен обрабатывать rejected', () => {
       const action = {
         type: fetchOrderByNumber.rejected.type,
-        error: { message: 'Failed to fetch order' }
+        error: { message: 'Не удалось получить заказ' }
       };
       const state = ordersReducer(initialState, action);
       expect(state).toEqual({
         ...initialState,
         orderRequest: false,
-        error: 'Failed to fetch order'
+        error: 'Не удалось получить заказ'
       });
     });
   });

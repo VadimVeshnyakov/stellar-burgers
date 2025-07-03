@@ -194,4 +194,30 @@ describe('userSlice', () => {
       expect(nextState.user).toEqual(fakeUser);
     });
   });
+
+  describe('userSlice coverage improvements', () => {
+    it('registerUser.rejected с undefined payload устанавливает дефолтную ошибку', () => {
+      const action = { type: registerUser.rejected.type, payload: undefined };
+      const nextState = userReducer(userInitialState, action);
+      expect(nextState.registerUserRequest).toBe(false);
+      expect(nextState.registerUserError).toBe('Ошибка регистрации');
+    });
+
+    it('loginUser.rejected с undefined payload устанавливает дефолтную ошибку', () => {
+      const action = { type: loginUser.rejected.type, payload: undefined };
+      const nextState = userReducer(userInitialState, action);
+      expect(nextState.loginUserRequest).toBe(false);
+      expect(nextState.loginUserError).toBe('Ошибка логина');
+    });
+
+    it('updateUser.rejected корректно обрабатывается', () => {
+      const prevState = { ...userInitialState, user: fakeUser };
+      const action = {
+        type: updateUser.rejected.type,
+        payload: 'Ошибка обновления'
+      };
+      const nextState = userReducer(prevState, action);
+      expect(nextState.user).toEqual(fakeUser);
+    });
+  });
 });
