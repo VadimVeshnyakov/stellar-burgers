@@ -7,6 +7,7 @@ import {
   createOrder,
   clearOrderModal
 } from '../../services/slices/ordersSlice';
+import { clearConstructor } from '../../services/slices/constructorSlice';
 import { RootState, AppDispatch } from '../../services/store';
 
 export const BurgerConstructor: FC = () => {
@@ -39,6 +40,7 @@ export const BurgerConstructor: FC = () => {
     ];
 
     dispatch(createOrder(ingredientIds));
+    dispatch(clearConstructor());
   };
 
   const closeOrderModal = () => {

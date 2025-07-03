@@ -2,14 +2,14 @@ import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import { orderBurgerApi, getOrderByNumberApi } from '@api';
 import { TOrder } from '@utils-types';
 
-interface IOrdersState {
+export interface IOrdersState {
   order: TOrder | null;
   orderRequest: boolean;
   orderModal: TOrder | null;
   error: string | null;
 }
 
-const initialState: IOrdersState = {
+export const initialState: IOrdersState = {
   order: null,
   orderRequest: false,
   orderModal: null,
@@ -50,6 +50,7 @@ const ordersSlice = createSlice({
       state.order = null;
       state.orderRequest = false;
       state.error = null;
+      state.orderModal = null;
     },
     setOrderModal: (state, action) => {
       state.orderModal = action.payload;
