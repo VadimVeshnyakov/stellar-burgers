@@ -50,6 +50,7 @@ const ordersSlice = createSlice({
       state.order = null;
       state.orderRequest = false;
       state.error = null;
+      state.orderModal = null;
     },
     setOrderModal: (state, action) => {
       state.orderModal = action.payload;
