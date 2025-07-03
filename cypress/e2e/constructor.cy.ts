@@ -79,4 +79,8 @@ describe('Создание заказа', () => {
     cy.closeModalByButton();
     cy.get('[data-cy^="constructor-ingredient-"]').should('have.length', 0);
   });
+  afterEach(() => {
+    window.localStorage.removeItem('refreshToken');
+    cy.clearCookie('accessToken');
+  });
 });
